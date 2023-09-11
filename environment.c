@@ -97,3 +97,52 @@ int _setenv(const char *name, const char *value, int overwrite)
 
 	return (0);
 }
+/**
+ * _unsetenv - Deletes an environment variable.
+ *
+ * @name: The name of the environment variable to delete.
+ *
+ * Return: If you are poor (insufficient RAM) - -1.
+ *         Otherwise - 0.
+ */
+int _unsetenv(const char *name)
+{
+	char *env_var;
+	char **new_environ;
+	size_t envsize = 0;
+	int i, j;
+
+	env_var = _getenv(name);
+	if (!env_var)
+		return (0);
+
+	while (environ[envsize])
+		envsize++;
+
+	new_environ = malloc(sizeof(char *) * envsize);
+	if (!new_environ)
+		return (-1);
+
+	for (i = 0, j = 0; environ[i]; i++)
+	{
+		if (env_var == environ[i])
+			continue;
+
+		new_environ[j] = malloc(_strlen(environ[i] + 1));
+		if (!new_environ[j])
+		{
+			for (j--; j >= 0; j--)
+				free(new_environ[j]);
+			free(new_environ);
+			return (-1);
+		}
+
+		_strcpy(new_environ[j], environ[i]);
+		j++;
+	}
+
+	environ = new_environ;
+	environ[envsize - 1] = NULL;
+
+	return (0);
+}
