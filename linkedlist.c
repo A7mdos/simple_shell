@@ -42,3 +42,20 @@ Node *add_node_end(Node **head, const char *dir)
 
 	return (new_node);
 }
+/**
+ * free_list - Frees a linked list.
+ *
+ * @head: A pointer to the head of the linked list to be freed.
+ */
+void free_list(Node *head)
+{
+	Node *temp;
+
+	while (head != NULL)
+	{
+		temp = head->next;
+		free(head->dir);
+		free(head);
+		head = temp;
+	}
+}
