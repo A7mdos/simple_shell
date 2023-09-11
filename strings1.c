@@ -91,3 +91,32 @@ int _strcmp(const char *s1, const char *s2)
 
 	return (*s1 - *s2);
 }
+/**
+ * _strncmp - compares two strings, n bytes at most.
+ *
+ * @s1: a pointer to the first string to be compared.
+ * @s2: a pointer to the second string to be compared.
+ * @n: bytes.
+ *
+ * Return: If s1 < s2 - the negative difference of the
+ *		   first unmatched characters.
+ *
+ *		   If s1 == s2 - 0.
+ *
+ *		   If s1 > s2 - the positive difference of the
+ *		   first unmatched characters.
+ */
+int _strncmp(const char *s1, const char *s2, int n)
+{
+	while (n && *s1 && *s2 && *s1 == *s2)
+	{
+		s1++;
+		s2++;
+		n--;
+	}
+
+	if (n == 0)
+		return (0);
+	else
+		return (*s1 - *s2);
+}
