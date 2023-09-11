@@ -14,8 +14,6 @@
 #include <sys/wait.h>
 
 extern char **environ;
-extern char prompt[];
-extern size_t prompt_size;
 
 /**
  * struct Node - A new struct type defining a node in a linked list.

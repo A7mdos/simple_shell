@@ -1,8 +1,5 @@
 #include "shell.h"
 
-char prompt[] = ">>> ";
-size_t prompt_size;
-
 
 /**
  * get_args - Reads and tokenizes arguments from the command line.
@@ -24,7 +21,7 @@ int get_args(char ***argv)
 
 	if (nread == 1) /*Enter -only- was read (Could it be sth other than Enter?)*/
 	{
-		write(STDOUT_FILENO, prompt, prompt_size);
+		write(STDOUT_FILENO, ">>> ", 4);
 		return (get_args(argv));
 	}
 	if (nread == -1)
@@ -70,12 +67,11 @@ int main(void)
 	char **argv = NULL;
 	int sui;
 
-	prompt_size = _strlen(prompt);
 	signal(SIGINT, handle_ctrl_c);
 
 	while (1)
 	{
-		write(STDOUT_FILENO, prompt, prompt_size);
+		write(STDOUT_FILENO, ">>> ", 4);
 
 		sui = get_args(&argv);
 		if (sui == CTRL_D)
@@ -90,7 +86,6 @@ int main(void)
 			perror("Error");
 			return (1);
 		}
-
 		if (fork_pid == 0) /*child process*/
 		{
 			if (execve(argv[0], argv, environ) == -1)
@@ -105,7 +100,6 @@ int main(void)
 			free_args(argv);
 		}
 	}
-
 	return (0);
 }
 
