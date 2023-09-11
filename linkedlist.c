@@ -59,3 +59,38 @@ void free_list(Node *head)
 		head = temp;
 	}
 }
+/**
+ * get_path_dir - Builds a linked list of the PATH directories.
+ *
+ * @paths: The string containing colon-separated list of paths.
+ *
+ * Return: If you are poor (insufficient RAM) - NULL.
+ *		   Otherwise - A pointer to the built linked list.
+ *
+ * Description: Splits the string of colon-separated paths into a linked list.
+ */
+Node *get_path_dir(char *paths)
+{
+	char **dirs;
+	Node *head = NULL;
+	int i = 0;
+
+	dirs = strsplit(paths, ":");
+	if (!dirs)
+		return (NULL);
+
+	while (dirs[i])
+	{
+		if (add_node_end(&head, dirs[i]) == NULL)
+		{
+			free_list(head);
+			free(dirs);
+			return (NULL);
+		}
+		i++;
+	}
+
+	free(dirs);
+
+	return (head);
+}
