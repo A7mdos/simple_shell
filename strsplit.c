@@ -16,7 +16,8 @@
  */
 char **strsplit(const char *str, const char *delimiter)
 {
-	char *str_copy = strdup(str);
+	char *str_copy = _strdup(str);
+	unsigned int old_size, new_size;
 
 	char **words;
 	char *token = strtok(str_copy, delimiter);
@@ -28,7 +29,9 @@ char **strsplit(const char *str, const char *delimiter)
 
 	while (token != NULL)
 	{
-		words = realloc(words, (count + 1) * sizeof(char *));
+		old_size = count * sizeof(char *);
+		new_size = (count + 1) * sizeof(char *);
+		words = _realloc(words, old_size, new_size);
 		if (!words)
 			return (NULL);
 

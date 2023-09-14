@@ -62,4 +62,8 @@ int _setenv(const char *name, const char *value, int overwrite);
 int _unsetenv(const char *name);
 
 
+
+void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
+
+
 #endif
