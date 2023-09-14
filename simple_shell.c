@@ -56,7 +56,7 @@ void free_args(char **argv)
 
 
 /**
- * main - Super simple shell.
+ * main - A simple UNIX command interpreter.
  *
  * Return: Always 0.
  */
