@@ -14,6 +14,7 @@
 #include <sys/wait.h>
 
 extern char **environ;
+extern char *program_name;
 
 /**
  * struct Node - A new struct type defining a node in a linked list.
