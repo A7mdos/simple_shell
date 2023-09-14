@@ -1,12 +1,12 @@
 #include "shell.h"
 
-/* strdup() is not allowed - Implement ur own */
 
 char *_strchr(char *s, char c);
 char *_strstr(char *haystack, char *needle);
 char *_strcpy(char *dest, const char *src);
 char *_strncpy(char *dest, const char *src, int n);
 char *_strdup(char *str);
+
 
 /**
  * _strchr - Locates a character in a string.
@@ -34,6 +34,8 @@ char *_strchr(char *s, char c)
 
 	return ('\0');
 }
+
+
 /**
  * _strstr - Locates a substring.
  *
@@ -44,7 +46,6 @@ char *_strchr(char *s, char c)
  *                                       of the located substring.
  *         If the substring is not located, NULL.
  */
-
 char *_strstr(char *haystack, char *needle)
 {
 	int i, j;
@@ -69,6 +70,8 @@ char *_strstr(char *haystack, char *needle)
 
 	return ('\0');
 }
+
+
 /**
  * _strcpy - copies the string pointed to by src, including the terminating
  *			 null byte (\0), to the buffer pointed to by dest.
@@ -91,6 +94,8 @@ char *_strcpy(char *dest, const char *src)
 
 	return (dest);
 }
+
+
 /**
  * _strncpy - Copies at most @n number of bytes
  *            from string @src into @dest.
@@ -116,6 +121,8 @@ char *_strncpy(char *dest, const char *src, int n)
 
 	return (dest);
 }
+
+
 /**
  * _strdup - Returns a pointer to a newly-allocated space in memory
  *           containing a copy of the string given as parameter.

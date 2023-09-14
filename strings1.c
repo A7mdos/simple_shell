@@ -1,5 +1,6 @@
 #include "shell.h"
 
+
 int _strlen(const char *s);
 char *_strcat(char *dest, const char *src);
 char *_strncat(char *dest, const char *src, int n);
@@ -24,6 +25,8 @@ int _strlen(const char *s)
 
 	return (length);
 }
+
+
 /**
  * _strcat - concatenates two strings
  *
@@ -45,6 +48,8 @@ char *_strcat(char *dest, const char *src)
 
 	return (dest);
 }
+
+
 /**
  * _strncat - concatenates two strings using at most n bytes from @src
  *
@@ -67,6 +72,8 @@ char *_strncat(char *dest, const char *src, int n)
 
 	return (dest);
 }
+
+
 /**
  * _strcmp - compares two strings.
  *
@@ -91,6 +98,8 @@ int _strcmp(const char *s1, const char *s2)
 
 	return (*s1 - *s2);
 }
+
+
 /**
  * _strncmp - compares two strings, n bytes at most.
  *
