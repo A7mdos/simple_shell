@@ -50,16 +50,9 @@ char **strsplit(const char *str, const char *delimiter);
 
 
 
-
-Node *add_node_end(Node **head, const char *dir);
-void free_list(Node *head);
-Node *get_path_dir(char *paths);
-
-
-
-char *_getenv(const char *name);
-int _setenv(const char *name, const char *value, int overwrite);
-int _unsetenv(const char *name);
+int num_len(int n);
+char *int_to_str(int n);
+int str_to_int(char *str);
 
 
 
