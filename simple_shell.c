@@ -2,6 +2,44 @@
 
 
 /**
+ * execute - Executes a command in a child process.
+ *
+ * @args: An array of the command with its arguments.
+ *
+ * Return: If an error occurs - an appropriate error code.
+ *         Otherwise - The exit value of the last executed command.
+ */
+int execute(char **args)
+{
+	pid_t fork_pid;
+	int status, ret;
+	char *command = args[0];
+
+	fork_pid = fork();
+	if (fork_pid == -1)
+	{
+		perror("Error child");
+		return (1);
+	}
+	if (fork_pid == 0) /* child process */
+	{
+		if (execve(command, args, environ) == -1)
+		{
+			perror("Error");
+			exit(1);
+		}
+	}
+	else /* parent process */
+	{
+		wait(&status);
+		ret = WEXITSTATUS(status);
+	}
+
+	return (ret);
+}
+
+
+/**
  * get_args - Reads and tokenizes arguments from the command line.
  *
  * @args: A pointer to an array to store the tokenized arguments.
@@ -30,10 +68,7 @@ int get_args(char ***args)
 	line[nread - 1] = '\0';
 	*args = strsplit(line, " ");
 	if (!*args)
-	{
-		perror("Failed to tokenize");
-		return (-1);
-	}
+		return (ESPLT);
 
 	free(line);
 	return (0);
@@ -62,12 +97,10 @@ void free_args(char **args)
  */
 int main(int argc, char **argv)
 {
-	pid_t fork_pid;
-	int status;
 	char **args = NULL;
 	int sui;
-
-	program_name = argv[0];
+	pid_t fork_pid;
+	int status;
 
 	signal(SIGINT, handle_ctrl_c);
 
@@ -81,27 +114,16 @@ int main(int argc, char **argv)
 			write(STDIN_FILENO, "\n", 1);
 			exit(0);
 		}
+		if (sui == ESPLT)
+		{
+			perror("Failed to tokenize");
+			continue;
+		}
 
-		fork_pid = fork();
-		if (fork_pid == -1)
-		{
-			perror("Error");
-			return (1);
-		}
-		if (fork_pid == 0) /*child process*/
-		{
-			if (execve(args[0], args, environ) == -1)
-			{
-				perror("Error");
-				exit(1);
-			}
-		}
-		else /*parent process*/
-		{
-			wait(&status);
-			free_args(args);
-		}
+		execute(args);
+		free_args(args);
 	}
+
 	return (0);
 }
 

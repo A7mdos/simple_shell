@@ -3,6 +3,7 @@
 
 #define UNUSED(x) (void)(x)
 
+#define ESPLT -1
 #define CTRL_D -2
 
 #include <stdio.h>
