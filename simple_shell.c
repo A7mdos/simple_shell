@@ -1,6 +1,13 @@
 #include "shell.h"
 
 
+int execute(char **args);
+int get_args(char ***args);
+int run_args(char ***args);
+void free_args(char **args);
+
+
+
 /**
  * execute - Executes a command in a child process.
  *
@@ -44,8 +51,8 @@ int execute(char **args)
  *
  * @args: A pointer to an array to store the tokenized arguments.
  *
- * Return: If an error occurs - -1 or CTRL_D.
- *         Otherwise - the tokenized array of arguments.
+ * Return: If tokenization failed - SPLT_ERR.
+ *         Otherwise - 0.
  */
 int get_args(char ***args)
 {
@@ -60,18 +67,45 @@ int get_args(char ***args)
 	if (nread == 1) /*Enter -only- was read (Could it be sth other than Enter?)*/
 	{
 		write(STDOUT_FILENO, ">>> ", 4);
-		return (get_args(args));
+		return (get_args(args)); /* Be aware of the call stack */
 	}
-	if (nread == -1)
-		return (CTRL_D);
+	if (nread == -1) /* Ctrl+D */
+	{
+		write(STDOUT_FILENO, "\n", 1);
+		exit(0);
+	}
 
 	line[nread - 1] = '\0';
 	*args = strsplit(line, " ");
 	if (!*args)
-		return (ESPLT);
+		return (SPLT_ERR);
 
 	free(line);
 	return (0);
+}
+
+
+/**
+ * run_args - Gets arguments and executes them if required.
+ *
+ * @args: A pointer to an array to store the arguments.
+ *
+ * Return: If tokenization failed - SPLT_ERR.
+ *		   If an error occurs - an appropriate error code.
+ *         Otherwise - The exit value of the last executed command.
+ */
+int run_args(char ***args)
+{
+	int ret;
+
+	ret = get_args(args);
+	if (ret == SPLT_ERR)
+		return (SPLT_ERR);
+
+	ret = execute(*args);
+
+	free_args(*args);
+	return (ret);
 }
 
 
@@ -93,6 +127,9 @@ void free_args(char **args)
 /**
  * main - A simple UNIX command interpreter.
  *
+ * @argc: Arguments count.
+ * @argv: Arguments vector
+ *
  * Return: Always 0.
  */
 int main(int argc, char **argv)
@@ -108,20 +145,9 @@ int main(int argc, char **argv)
 	{
 		write(STDOUT_FILENO, ">>> ", 4);
 
-		sui = get_args(&args);
-		if (sui == CTRL_D)
-		{
-			write(STDIN_FILENO, "\n", 1);
-			exit(0);
-		}
-		if (sui == ESPLT)
-		{
+		sui = run_args(&args);
+		if (sui == SPLT_ERR)
 			perror("Failed to tokenize");
-			continue;
-		}
-
-		execute(args);
-		free_args(args);
 	}
 
 	return (0);
