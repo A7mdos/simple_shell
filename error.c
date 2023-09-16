@@ -1,0 +1,31 @@
+#include "shell.h"
+
+/**
+ * write_error - Writes an error message to stderr.
+ *
+ * @args: Array of arguments including the command name.
+ * @err: The error's value.
+ *
+ * Return: The error's value.
+ */
+int write_error(char **args, int err)
+{
+	char *error_msg;
+
+	switch (err)
+	{
+	case 126:
+		error_msg = error_126(args);
+		break;
+	case 127:
+		error_msg = error_127(args);
+		break;
+	}
+
+	write(STDERR_FILENO, error_msg, _strlen(error_msg));
+
+	if (error_msg)
+		free(error_msg);
+
+	return (err);
+}

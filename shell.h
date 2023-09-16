@@ -14,9 +14,12 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
+#include <fcntl.h>
+#include <errno.h>
 
 extern char **environ;
 extern char *program_name;
+extern int history;
 
 /**
  * struct Node - A new struct type defining a node in a linked list.
@@ -75,6 +78,12 @@ Node *build_path_dirs(char *paths);
 
 char *get_location(char *command);
 
+
+
+int create_error(char **args, int err);
+
+char *error_126(char **args);
+char *error_127(char **args);
 
 
 #endif

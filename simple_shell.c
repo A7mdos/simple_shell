@@ -6,6 +6,8 @@ int get_args(char ***args);
 int run_args(char ***args);
 void free_args(char **args);
 
+char *program_name;
+int history;
 
 
 /**
@@ -29,7 +31,7 @@ int execute(char **args)
 	}
 
 	fork_pid = fork();
-	if (fork_pid == -1)
+	if (fork_pid == -1) /* fork failed */
 	{
 		if (allocated_command)
 			free(command);
@@ -38,6 +40,12 @@ int execute(char **args)
 	}
 	if (fork_pid == 0) /* child process */
 	{
+		if (!command || (access(command, F_OK) == -1))
+			return(write_error(args, 127));
+
+		if (access(command, X_OK) == -1)
+			return (write_error(args, 126));
+
 		if (execve(command, args, environ) == -1)
 		{
 			perror("Error");
@@ -111,6 +119,7 @@ int run_args(char ***args)
 		return (SPLT_ERR);
 
 	ret = execute(*args);
+	history++;
 
 	free_args(*args);
 	return (ret);
@@ -147,6 +156,8 @@ int main(int argc, char **argv)
 	pid_t fork_pid;
 	int status;
 
+	program_name = argv[0];
+	history = 1;
 	signal(SIGINT, handle_ctrl_c);
 
 	while (1)
