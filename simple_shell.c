@@ -19,12 +19,20 @@ void free_args(char **args);
 int execute(char **args)
 {
 	pid_t fork_pid;
-	int status, ret;
+	int status, ret, allocated_command = 0;
 	char *command = args[0];
+
+	if (command[0] != '/')
+	{
+		command = get_location(command);
+		allocated_command = 1;
+	}
 
 	fork_pid = fork();
 	if (fork_pid == -1)
 	{
+		if (allocated_command)
+			free(command);
 		perror("Error child");
 		return (1);
 	}

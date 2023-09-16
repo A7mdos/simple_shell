@@ -13,6 +13,7 @@
 #include <signal.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 
 extern char **environ;
 extern char *program_name;
@@ -71,5 +72,9 @@ int _unsetenv(const char *name);
 Node *add_node_end(Node **head, const char *dir);
 void free_list(Node *head);
 Node *build_path_dirs(char *paths);
+
+char *get_location(char *command);
+
+
 
 #endif
