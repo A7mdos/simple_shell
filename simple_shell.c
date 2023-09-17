@@ -41,7 +41,7 @@ int execute(char **args)
 	if (fork_pid == 0) /* child process */
 	{
 		if (!command || (access(command, F_OK) == -1))
-			return(write_error(args, 127));
+			return (write_error(args, 127));
 
 		if (access(command, X_OK) == -1)
 			return (write_error(args, 126));
@@ -152,9 +152,9 @@ void free_args(char **args)
 int main(int argc, char **argv)
 {
 	char **args = NULL;
-	int sui;
-	pid_t fork_pid;
-	int status;
+	int exe_ret;
+
+	UNUSED(argc);
 
 	program_name = argv[0];
 	history = 1;
@@ -164,19 +164,10 @@ int main(int argc, char **argv)
 	{
 		write(STDOUT_FILENO, ">>> ", 4);
 
-		sui = run_args(&args);
-		if (sui == SPLT_ERR)
+		exe_ret = run_args(&args);
+		if (exe_ret == SPLT_ERR)
 			perror("Failed to tokenize");
 	}
 
 	return (0);
 }
-
-
-/**
- * Some concerns:
- *
- * - I replace '\n' with '\0' so the end of the line becomes '\0' '\0'
- *		maybe I should just remove '\n' ?
- * - Ending input with Ctrl + D.
- */

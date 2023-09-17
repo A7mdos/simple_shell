@@ -39,7 +39,7 @@ void handle_ctrl_c(int signum);
 
 
 
-
+/* String helpers */
 int _strlen(const char *s);
 char *_strcat(char *dest, const char *src);
 char *_strncat(char *dest, const char *src, int n);
@@ -55,32 +55,34 @@ char *_strdup(char *str);
 char **strsplit(const char *str, const char *delimiter);
 
 
-
+/* Helpers */
 int num_len(int n);
 char *int_to_str(int n);
 int str_to_int(char *str);
 
 
-
+/* Memory */
 void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
 
 
-
+/* Environment */
 char *_getenv(const char *name);
 int _setenv(const char *name, const char *value, int overwrite);
 int _unsetenv(const char *name);
 
 
-
+/* Linked list */
 Node *add_node_end(Node **head, const char *dir);
 void free_list(Node *head);
 Node *build_path_dirs(char *paths);
 
+
+/* Get Location */
 char *get_location(char *command);
 
 
-
-int create_error(char **args, int err);
+/* Errors */
+int write_error(char **args, int err);
 
 char *error_126(char **args);
 char *error_127(char **args);

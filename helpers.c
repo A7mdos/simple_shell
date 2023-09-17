@@ -80,11 +80,11 @@ char *int_to_str(int n)
 
 
 /**
- * str_to_int - convert a string to an integer
+ * str_to_int - Convert a string to an integer
  *
- * @str: the string to be converted
+ * @str: The string to be converted
  *
- * Return: the extracted integer from the string
+ * Return: The extracted integer from the string
  */
 int str_to_int(char *str)
 {
