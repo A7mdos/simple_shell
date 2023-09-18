@@ -54,11 +54,15 @@ int main(int argc, char **argv)
 int execute(char **args)
 {
 	pid_t fork_pid;
-	int status, ret, allocated_command = 0;
+	int status, ret, allocated_command = 0, exit_status = 0;
 	char *command = args[0];
 
 	if (_strcmp(command, "exit") == 0)
-		exit(0);
+	{
+		if (args[1])
+			exit_status = str_to_int(args[1]);
+		exit(exit_status);
+	}
 
 	if (command[0] != '/')
 	{
