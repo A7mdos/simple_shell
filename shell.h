@@ -34,9 +34,24 @@ struct Node
 };
 typedef struct Node Node;
 
+/**
+ * struct Builtin - A new struct type defining a builtin command.
+ *
+ * @name: The name of the builtin command.
+ * @func: A function pointer to the builtin command's function.
+ */
+struct Builtin
+{
+	char *name;
+	int (*func)(char **args);
+};
+typedef struct Builtin Builtin;
 
+
+
+
+/* Signal handlers */
 void handle_ctrl_c(int signum);
-
 
 
 /* String helpers */
@@ -87,5 +102,9 @@ int write_error(char **args, int err);
 char *error_126(char **args);
 char *error_127(char **args);
 
+
+/* Builtins */
+int (*get_builtin(char *command))(char **args);
+int fshell_exit(char **args);
 
 #endif

@@ -54,15 +54,8 @@ int main(int argc, char **argv)
 int execute(char **args)
 {
 	pid_t fork_pid;
-	int status, ret, allocated_command = 0, exit_status = 0;
+	int status, ret, allocated_command = 0;
 	char *command = args[0];
-
-	if (_strcmp(command, "exit") == 0)
-	{
-		if (args[1])
-			exit_status = str_to_int(args[1]);
-		exit(exit_status);
-	}
 
 	if (command[0] != '/')
 	{
@@ -105,12 +98,12 @@ int execute(char **args)
 /**
  * get_args - Reads and tokenizes arguments from the command line.
  *
- * @args: A pointer to an array to store the tokenized arguments.
+ * @args_ptr: A pointer to an array to store the tokenized arguments.
  *
  * Return: If tokenization failed - SPLT_ERR.
  *         Otherwise - 0.
  */
-int get_args(char ***args)
+int get_args(char ***args_ptr)
 {
 	size_t n = 0;
 	ssize_t nread;
@@ -123,7 +116,7 @@ int get_args(char ***args)
 	if (nread == 1) /*Enter -only- was read (Could it be sth other than Enter?)*/
 	{
 		write(STDOUT_FILENO, ">>> ", 4);
-		return (get_args(args)); /* Be aware of the call stack */
+		return (get_args(args_ptr)); /* Be aware of the call stack */
 	}
 	if (nread == -1) /* Ctrl+D */
 	{
@@ -132,8 +125,8 @@ int get_args(char ***args)
 	}
 
 	line[nread - 1] = '\0';
-	*args = strsplit(line, " ");
-	if (!*args)
+	*args_ptr = strsplit(line, " ");
+	if (!*args_ptr)
 		return (SPLT_ERR);
 
 	free(line);
@@ -144,24 +137,33 @@ int get_args(char ***args)
 /**
  * run_args - Gets arguments and executes them if required.
  *
- * @args: A pointer to an array to store the arguments.
+ * @args_ptr: A pointer to an array to store the arguments.
  *
  * Return: If tokenization failed - SPLT_ERR.
  *		   If an error occurs - an appropriate error code.
  *         Otherwise - The exit value of the last executed command.
  */
-int run_args(char ***args)
+int run_args(char ***args_ptr)
 {
 	int ret;
+	int (*builtin)(char **args);
+	char *command;
 
-	ret = get_args(args);
+	ret = get_args(args_ptr);
 	if (ret == SPLT_ERR)
 		return (SPLT_ERR);
 
-	ret = execute(*args);
+	command = *args_ptr[0];
+
+	builtin = get_builtin(command);
+	if (builtin)
+		ret = builtin(*args_ptr);
+	else
+		ret = execute(*args_ptr);
+
 	history++;
 
-	free_args(*args);
+	free_args(*args_ptr);
 	return (ret);
 }
 
