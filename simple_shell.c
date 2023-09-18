@@ -11,6 +11,39 @@ int history;
 
 
 /**
+ * main - A simple UNIX command interpreter.
+ *
+ * @argc: Arguments count.
+ * @argv: Arguments vector
+ *
+ * Return: Always 0.
+ */
+int main(int argc, char **argv)
+{
+	char **args = NULL;
+	int exe_ret;
+
+	UNUSED(argc);
+
+	program_name = argv[0];
+	history = 1;
+	signal(SIGINT, handle_ctrl_c);
+
+	while (1)
+	{
+		write(STDOUT_FILENO, ">>> ", 4);
+
+		exe_ret = run_args(&args);
+		if (exe_ret == SPLT_ERR)
+			perror("Failed to tokenize");
+	}
+
+	return (0);
+}
+
+
+
+/**
  * execute - Executes a command in a child process.
  *
  * @args: An array of the command with its arguments.
@@ -138,36 +171,4 @@ void free_args(char **args)
 	while (args[i] != NULL)
 		free(args[i++]);
 	free(args);
-}
-
-
-/**
- * main - A simple UNIX command interpreter.
- *
- * @argc: Arguments count.
- * @argv: Arguments vector
- *
- * Return: Always 0.
- */
-int main(int argc, char **argv)
-{
-	char **args = NULL;
-	int exe_ret;
-
-	UNUSED(argc);
-
-	program_name = argv[0];
-	history = 1;
-	signal(SIGINT, handle_ctrl_c);
-
-	while (1)
-	{
-		write(STDOUT_FILENO, ">>> ", 4);
-
-		exe_ret = run_args(&args);
-		if (exe_ret == SPLT_ERR)
-			perror("Failed to tokenize");
-	}
-
-	return (0);
 }
