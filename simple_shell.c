@@ -165,6 +165,8 @@ int run_args(char ***args_ptr)
 	}
 
 	command = *args_ptr[0];
+	if (!command)
+		return (0);
 
 	builtin = get_builtin(command);
 	if (builtin)
