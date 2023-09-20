@@ -98,6 +98,8 @@ int execute(char **args)
 	else /* parent process */
 	{
 		wait(&status);
+		if (allocated_command)
+			free(command);
 		ret = WEXITSTATUS(status);
 	}
 
