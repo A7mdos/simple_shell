@@ -1,7 +1,7 @@
 #include "shell.h"
 
 
-Node *add_node_end(Node **head, const char *dir);
+Node *add_node_end(Node **head, char *dir);
 void free_list(Node *head);
 Node *build_path_dirs(char *paths);
 
@@ -17,7 +17,7 @@ Node *build_path_dirs(char *paths);
  * Return: If you are poor (insufficient RAM) - NULL.
  *         Otherwise - the address of the new element.
  */
-Node *add_node_end(Node **head, const char *dir)
+Node *add_node_end(Node **head, char *dir)
 {
 	Node *new_node, *tail_node;
 

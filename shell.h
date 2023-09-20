@@ -67,7 +67,7 @@ char *_strcpy(char *dest, const char *src);
 char *_strncpy(char *dest, const char *src, int n);
 char *_strdup(char *str);
 
-char **strsplit(const char *str, const char *delimiter);
+char **strsplit(char *str, const char *delimiter);
 
 
 /* Helpers */
@@ -87,7 +87,7 @@ int _unsetenv(const char *name);
 
 
 /* Linked list */
-Node *add_node_end(Node **head, const char *dir);
+Node *add_node_end(Node **head, char *dir);
 void free_list(Node *head);
 Node *build_path_dirs(char *paths);
 

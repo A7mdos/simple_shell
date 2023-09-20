@@ -14,7 +14,7 @@
  * Description: This version does not affect the original string.
  *		Allocated memory should be freed later.
  */
-char **strsplit(const char *str, const char *delimiter)
+char **strsplit(char *str, const char *delimiter)
 {
 	char *str_copy = _strdup(str);
 	unsigned int old_size, new_size;
