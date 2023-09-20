@@ -26,7 +26,7 @@ char *get_location(char *command)
 	dir_node = head;
 	while (dir_node)
 	{
-		pathname = malloc(_strlen(dir_node->dir) + _strlen(command) + 2);
+		pathname = malloc(_strlen(dir_node->dir) + _strlen(command) + 1);
 		if (!pathname)
 			return (NULL);
 
