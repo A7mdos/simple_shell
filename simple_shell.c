@@ -29,6 +29,13 @@ int main(int argc, char **argv)
 	history = 1;
 	signal(SIGINT, handle_ctrl_c);
 
+	if (!isatty(STDIN_FILENO))
+	{
+		while (1)
+			run_args(&args);
+
+	}
+
 	while (1)
 	{
 		write(STDOUT_FILENO, ">>> ", 4);
@@ -101,7 +108,8 @@ int execute(char **args)
  * @args_ptr: A pointer to an array to store the tokenized arguments.
  *
  * Return: If tokenization failed - SPLT_ERR.
- *         Otherwise - 0.
+ *		   If EOF was read - END_OF_FILE.
+ *         Otherwise, on success - 0.
  */
 int get_args(char ***args_ptr)
 {
@@ -118,11 +126,8 @@ int get_args(char ***args_ptr)
 		write(STDOUT_FILENO, ">>> ", 4);
 		return (get_args(args_ptr)); /* Be aware of the call stack */
 	}
-	if (nread == -1) /* Ctrl+D */
-	{
-		write(STDOUT_FILENO, "\n", 1);
-		exit(0);
-	}
+	if (nread == -1) /* Ctrl+D or END_OF_FILE*/
+		return (END_OF_FILE);
 
 	line[nread - 1] = '\0';
 	*args_ptr = strsplit(line, " ");
@@ -152,6 +157,12 @@ int run_args(char ***args_ptr)
 	ret = get_args(args_ptr);
 	if (ret == SPLT_ERR)
 		return (SPLT_ERR);
+	if (ret == END_OF_FILE)
+	{
+		if (isatty(STDIN_FILENO))
+			write(STDOUT_FILENO, "\n", 1);
+		exit(0);
+	}
 
 	command = *args_ptr[0];
 

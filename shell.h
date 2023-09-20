@@ -4,7 +4,7 @@
 #define UNUSED(x) (void)(x)
 
 #define SPLT_ERR -1
-#define CTRL_D -2
+#define END_OF_FILE -2
 
 #include <stdio.h>
 #include <stdlib.h>
