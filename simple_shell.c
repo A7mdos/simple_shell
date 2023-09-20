@@ -64,7 +64,7 @@ int execute(char **args)
 	int status, ret, allocated_command = 0;
 	char *command = args[0];
 
-	if (command[0] != '/' || command[0] != '.')
+	if (command[0] != '/' && command[0] != '.')
 	{
 		command = get_location(command);
 		allocated_command = 1;
