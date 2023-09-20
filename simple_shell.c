@@ -80,7 +80,10 @@ int execute(char **args)
 	}
 	if (fork_pid == 0) /* child process */
 	{
-		if (!command || (access(command, F_OK) == -1))
+		if (!command)
+			return (write_error(args, 127));
+
+		if (access(command, F_OK) == -1)
 			return (write_error(args, 127));
 
 		if (access(command, X_OK) == -1)

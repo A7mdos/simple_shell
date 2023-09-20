@@ -33,6 +33,7 @@ char *get_location(char *command)
 		_strcpy(pathname, dir_node->dir);
 		_strcat(pathname, "/");
 		_strcat(pathname, command);
+		_strcat(pathname, "\0");
 
 		if (stat(pathname, &st) == 0)
 		{
