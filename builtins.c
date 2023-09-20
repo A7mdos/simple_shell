@@ -23,7 +23,7 @@ int (*get_builtin(char *command))(char **args)
 	};
 
 	for (i = 0; builtins[i].name; i++)
-		if (strcmp(builtins[i].name, command) == 0)
+		if (_strcmp(builtins[i].name, command) == 0)
 			return (builtins[i].func);
 
 	return (NULL);
