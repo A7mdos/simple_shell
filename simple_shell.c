@@ -173,10 +173,7 @@ int run_args(char ***args_ptr)
 
 	command = *args_ptr[0];
 	if (!command)
-	{
-		free_args(*args_ptr);
 		return (0);
-	}
 
 	builtin = get_builtin(command);
 	if (builtin)
