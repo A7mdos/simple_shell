@@ -48,6 +48,11 @@ struct Builtin
 typedef struct Builtin Builtin;
 
 
+/* Main */
+int execute(char **args);
+int get_args(char ***args);
+int run_args(char ***args);
+void free_args(char **args);
 
 
 /* Signal handlers */

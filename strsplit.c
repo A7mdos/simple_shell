@@ -25,7 +25,10 @@ char **strsplit(char *str, const char *delimiter)
 
 	words = malloc(sizeof(char *));
 	if (!words)
+	{
+		free(str_copy);
 		return (NULL);
+	}
 
 	while (token != NULL)
 	{
@@ -49,6 +52,5 @@ char **strsplit(char *str, const char *delimiter)
 	}
 
 	free(str_copy);
-
 	return (words);
 }

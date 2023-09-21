@@ -45,5 +45,6 @@ int fshell_exit(char **args)
 	if (args[1])
 		status = str_to_int(args[1]);
 
+	free_args(args);
 	exit(status);
 }
