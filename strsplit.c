@@ -33,13 +33,17 @@ char **strsplit(char *str, const char *delimiter)
 		new_size = (count + 1) * sizeof(char *);
 		words = _realloc(words, old_size, new_size);
 		if (!words)
+		{
+			free(str_copy);
 			return (NULL);
-
+		}
 		words[count - 1] = _strdup(token);
 		words[count] = NULL;
 		if (!words[count - 1])
+		{
+			free(str_copy);
 			return (NULL);
-
+		}
 		count++;
 		token = strtok(NULL, delimiter);
 	}

@@ -136,10 +136,12 @@ int get_args(char ***args_ptr)
 
 	line[nread - 1] = '\0';
 	*args_ptr = strsplit(line, " ");
+
+	free(line);
+
 	if (!*args_ptr)
 		return (SPLT_ERR);
 
-	free(line);
 	return (0);
 }
 
