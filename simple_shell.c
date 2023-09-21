@@ -21,7 +21,6 @@ int history;
 int main(int argc, char **argv)
 {
 	char **args = NULL;
-	int exe_ret;
 
 	UNUSED(argc);
 
@@ -39,10 +38,7 @@ int main(int argc, char **argv)
 	while (1)
 	{
 		write(STDOUT_FILENO, ">>> ", 4);
-
-		exe_ret = run_args(&args);
-		if (exe_ret == SPLT_ERR)
-			perror("Failed to tokenize");
+		run_args(&args);
 	}
 
 	return (0);
@@ -61,13 +57,23 @@ int main(int argc, char **argv)
 int execute(char **args)
 {
 	pid_t fork_pid;
-	int status, ret, allocated_command = 0;
+	int status, ret = 0, allocated_command = 0;
 	char *command = args[0];
 
 	if (command[0] != '/' && command[0] != '.')
 	{
 		command = get_location(command);
 		allocated_command = 1;
+	}
+
+	if (!command)
+		return (write_error(args, 127));
+
+	if (access(command, F_OK) == -1)
+	{
+		if (allocated_command)
+			free(command);
+		return (write_error(args, 127));
 	}
 
 	fork_pid = fork();
@@ -80,12 +86,6 @@ int execute(char **args)
 	}
 	if (fork_pid == 0) /* child process */
 	{
-		if (!command)
-			return (write_error(args, 127));
-
-		if (access(command, F_OK) == -1)
-			return (write_error(args, 127));
-
 		if (access(command, X_OK) == -1)
 			return (write_error(args, 126));
 
@@ -129,6 +129,7 @@ int get_args(char ***args_ptr)
 	if (nread == 1) /*Enter -only- was read (Could it be sth other than Enter?)*/
 	{
 		write(STDOUT_FILENO, ">>> ", 4);
+		history++;
 		return (get_args(args_ptr)); /* Be aware of the call stack */
 	}
 	if (nread == -1) /* Ctrl+D or END_OF_FILE*/
@@ -197,7 +198,10 @@ void free_args(char **args)
 {
 	size_t i = 0;
 
-	while (args[i] != NULL)
-		free(args[i++]);
-	free(args);
+	if (args)
+	{
+		while (args[i] != NULL)
+			free(args[i++]);
+		free(args);
+	}
 }

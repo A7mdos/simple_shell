@@ -72,7 +72,7 @@ char *_strcpy(char *dest, const char *src);
 char *_strncpy(char *dest, const char *src, int n);
 char *_strdup(char *str);
 
-char **strsplit(char *str, const char *delimiter);
+char **strsplit(char *str, char *delimiter);
 
 
 /* Helpers */
