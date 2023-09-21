@@ -20,6 +20,8 @@
 extern char **environ;
 extern char *program_name;
 extern int history;
+extern char *prompt;
+extern int prompt_size;
 
 /**
  * struct Node - A new struct type defining a node in a linked list.

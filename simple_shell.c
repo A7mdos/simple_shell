@@ -8,7 +8,8 @@ void free_args(char **args);
 
 char *program_name;
 int history;
-
+char *prompt;
+int prompt_size;
 
 /**
  * main - A simple UNIX command interpreter.
@@ -26,6 +27,8 @@ int main(int argc, char **argv)
 
 	program_name = argv[0];
 	history = 1;
+	prompt = ">>> ";
+	prompt_size = _strlen(prompt);
 	signal(SIGINT, handle_ctrl_c);
 
 	if (!isatty(STDIN_FILENO))
@@ -37,7 +40,7 @@ int main(int argc, char **argv)
 
 	while (1)
 	{
-		write(STDOUT_FILENO, ">>> ", 4);
+		write(STDOUT_FILENO, prompt, prompt_size);
 		run_args(&args);
 	}
 
@@ -128,7 +131,7 @@ int get_args(char ***args_ptr)
 
 	if (nread == 1) /*Enter -only- was read (Could it be sth other than Enter?)*/
 	{
-		write(STDOUT_FILENO, ">>> ", 4);
+		write(STDOUT_FILENO, prompt, prompt_size);
 		history++;
 		return (get_args(args_ptr)); /* Be aware of the call stack */
 	}
