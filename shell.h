@@ -115,5 +115,6 @@ char *error_2(char **args);
 /* Builtins */
 int (*get_builtin(char *command))(char **args);
 int fshell_exit(char **args);
+int fshell_env(char **args);
 
 #endif
