@@ -36,12 +36,27 @@ int (*get_builtin(char *command))(char **args)
  *
  * @args: An array of arguments containing the exit value.
  *
- * Return: Exits with the given status value, or 0 if not given.
+ * Return: If exit status is invalid - 2
+ *		   Otherwise - exits with the given status value,
+ *					   or the previous if not given.
  */
 int fshell_exit(char **args)
 {
-	if (args[1])
+	int i;
+	char *exit_arg = args[1];
+
+	if (exit_arg)
+	{
+		for (i = 0; exit_arg[i]; i++)
+		/*TODO numbers starting with a '+' shouldn't be considered invalid */
+			if (exit_arg[i] < '0' || exit_arg[i] > '9')
+			{
+				status = write_error(args, 2);
+				return (status);
+			}
+
 		status = str_to_int(args[1]);
+	}
 
 	free_args(args);
 	exit(status);

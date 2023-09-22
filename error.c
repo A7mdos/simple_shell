@@ -20,6 +20,9 @@ int write_error(char **args, int err)
 	case 127:
 		error_msg = error_127(args);
 		break;
+	case 2:
+		error_msg = error_2(args);
+		break;
 	}
 
 	write(STDERR_FILENO, error_msg, _strlen(error_msg));
