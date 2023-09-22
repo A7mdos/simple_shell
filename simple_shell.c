@@ -8,6 +8,7 @@ void free_args(char **args);
 
 char *program_name;
 int history;
+int status;
 char *prompt;
 int prompt_size;
 
@@ -22,29 +23,27 @@ int prompt_size;
 int main(int argc, char **argv)
 {
 	char **args = NULL;
+	int ret = 0;
 
 	UNUSED(argc);
 
 	program_name = argv[0];
 	history = 1;
+	status = 0;
 	prompt = ">>> ";
 	prompt_size = _strlen(prompt);
 	signal(SIGINT, handle_ctrl_c);
 
-	if (!isatty(STDIN_FILENO))
-	{
-		while (1)
-			run_args(&args);
-
-	}
-
 	while (1)
 	{
-		write(STDOUT_FILENO, prompt, prompt_size);
-		run_args(&args);
+		if (isatty(STDIN_FILENO))
+			write(STDOUT_FILENO, prompt, prompt_size);
+		ret = run_args(&args);
+		if (ret == END_OF_FILE)
+			exit(status);
 	}
 
-	return (0);
+	return (status);
 }
 
 
@@ -60,7 +59,7 @@ int main(int argc, char **argv)
 int execute(char **args)
 {
 	pid_t fork_pid;
-	int status, ret = 0, allocated_command = 0;
+	int ret = 0, allocated_command = 0;
 	char *command = args[0];
 
 	if (command[0] != '/' && command[0] != '.')
@@ -151,11 +150,13 @@ int get_args(char ***args_ptr)
 
 
 /**
- * run_args - Gets arguments and executes them if required.
+ * run_args - Gets arguments, executes them if required
+ *			  and modifies the status.
  *
  * @args_ptr: A pointer to an array to store the arguments.
  *
  * Return: If tokenization failed - SPLT_ERR.
+ *		   If EOF was read - END_OF_FILE.
  *		   If an error occurs - an appropriate error code.
  *         Otherwise - The exit value of the last executed command.
  */
@@ -172,7 +173,7 @@ int run_args(char ***args_ptr)
 	{
 		if (isatty(STDIN_FILENO))
 			write(STDOUT_FILENO, "\n", 1);
-		exit(0);
+		return (END_OF_FILE);
 	}
 
 	command = *args_ptr[0];
@@ -181,14 +182,14 @@ int run_args(char ***args_ptr)
 
 	builtin = get_builtin(command);
 	if (builtin)
-		ret = builtin(*args_ptr);
+		status = builtin(*args_ptr);
 	else
-		ret = execute(*args_ptr);
+		status = execute(*args_ptr);
 
 	history++;
 
 	free_args(*args_ptr);
-	return (ret);
+	return (status);
 }
 
 

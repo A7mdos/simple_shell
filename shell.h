@@ -20,6 +20,7 @@
 extern char **environ;
 extern char *program_name;
 extern int history;
+extern int status;
 extern char *prompt;
 extern int prompt_size;
 
