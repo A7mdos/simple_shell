@@ -69,7 +69,7 @@ int fshell_exit(char **args)
  *
  * @args: An array of arguments to the env command (including the command).
  *
- * Return: If no enviroment is available - 69.
+ * Return: If no enviroment is available - -1.
  *		   Otherwise - 0.
  */
 int fshell_env(char **args)
@@ -79,7 +79,7 @@ int fshell_env(char **args)
 	UNUSED(args);
 
 	if (!environ)
-		return (69);
+		return (-1);
 
 	for (i = 0; environ[i]; i++)
 	{
@@ -96,7 +96,7 @@ int fshell_env(char **args)
  *
  * @args: An array of arguments to the setenv command (including the command).
  *
- * Return: If an error occurs - 69.
+ * Return: If an error occurs - -1.
  *         Otherwise - 0.
  */
 int fshell_setenv(char **args)
@@ -108,13 +108,13 @@ int fshell_setenv(char **args)
 	int i;
 
 	if (!name || !value)
-		return (69);
+		return (-1);
 
 	name_len = _strlen(name);
 	value_len = _strlen(value);
 	new_var = malloc(name_len + 1 + value_len + 1);
 	if (!new_var)
-		return (69);
+		return (-1);
 
 	_strcpy(new_var, name);
 	_strcat(new_var, "=");
@@ -135,7 +135,7 @@ int fshell_setenv(char **args)
 	if (!new_environ)
 	{
 		free(new_var);
-		return (69);
+		return (-1);
 	}
 
 	for (i = 0; environ[i]; i++)
