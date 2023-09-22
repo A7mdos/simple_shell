@@ -130,7 +130,8 @@ int get_args(char ***args_ptr)
 
 	if (nread == 1) /*Enter -only- was read (Could it be sth other than Enter?)*/
 	{
-		write(STDOUT_FILENO, prompt, prompt_size);
+		if (isatty(STDIN_FILENO))
+			write(STDOUT_FILENO, prompt, prompt_size);
 		history++;
 		return (get_args(args_ptr)); /* Be aware of the call stack */
 	}
