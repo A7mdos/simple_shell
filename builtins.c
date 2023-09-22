@@ -40,8 +40,6 @@ int (*get_builtin(char *command))(char **args)
  */
 int fshell_exit(char **args)
 {
-	status = 0;
-
 	if (args[1])
 		status = str_to_int(args[1]);
 
