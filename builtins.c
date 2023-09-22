@@ -3,6 +3,7 @@
 int (*get_builtin(char *command))(char **args);
 int fshell_exit(char **args);
 int fshell_env(char **args);
+int fshell_setenv(char **args);
 
 
 /**
@@ -20,6 +21,8 @@ int (*get_builtin(char *command))(char **args)
 	Builtin builtins[] = {
 		{ "exit", fshell_exit },
 		{ "env", fshell_env },
+		{ "setenv", fshell_setenv },
+	/*	{ "unsetenv", fshell_unsetenv }, */
 		{ NULL, NULL }
 	};
 
@@ -53,7 +56,7 @@ int fshell_exit(char **args)
 			if (exit_arg[i] < '0' || exit_arg[i] > '9')
 				return (write_error(args, 2));
 
-		status = str_to_int(args[1]);
+		status = str_to_int(exit_arg);
 	}
 
 	free_args(args);
@@ -64,7 +67,7 @@ int fshell_exit(char **args)
 /**
  * fshell_env - Prints the current environment.
  *
- * @args: An array of arguments to the env command.
+ * @args: An array of arguments to the env command (including the command).
  *
  * Return: If no enviroment is available - 69.
  *		   Otherwise - 0.
@@ -83,5 +86,64 @@ int fshell_env(char **args)
 		write(STDOUT_FILENO, environ[i], _strlen(environ[i]));
 		write(STDOUT_FILENO, "\n", 1);
 	}
+	return (0);
+}
+
+
+/**
+ * fshell_setenv - Initializes a new environment variable,
+ *				   or modifies an existing one.
+ *
+ * @args: An array of arguments to the setenv command (including the command).
+ *
+ * Return: If an error occurs - 69.
+ *         Otherwise - 0.
+ */
+int fshell_setenv(char **args)
+{
+	char **env_var = NULL, **new_environ, *new_var,
+		 *name = args[1],
+		 *value = args[2];
+	size_t name_len, value_len, envsize = 0;
+	int i;
+
+	if (!name || !value)
+		return (69);
+
+	name_len = _strlen(name);
+	value_len = _strlen(value);
+	new_var = malloc(name_len + 1 + value_len + 1);
+	if (!new_var)
+		return (69);
+
+	_strcpy(new_var, name);
+	_strcat(new_var, "=");
+	_strcat(new_var, value);
+
+	env_var = _getenv(name);
+	if (env_var)
+	{
+		free(*env_var);
+		*env_var = new_var;
+		return (0);
+	}
+
+	while (environ[envsize])
+		envsize++;
+
+	new_environ = malloc(sizeof(char *) * (envsize + 2));
+	if (!new_environ)
+	{
+		free(new_var);
+		return (69);
+	}
+
+	for (i = 0; environ[i]; i++)
+		new_environ[i] = environ[i];
+
+	environ = new_environ;
+	environ[i] = new_var;
+	environ[i + 1] = NULL;
+
 	return (0);
 }

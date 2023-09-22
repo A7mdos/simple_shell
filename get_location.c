@@ -13,15 +13,15 @@
  */
 char *get_location(char *command)
 {
-	char *PATH, *pathname;
+	char **PATH_ptr, *pathname;
 	Node *head, *dir_node;
 	struct stat st;
 
-	PATH = _getenv("PATH");
-	if (!PATH)
+	PATH_ptr = _getenv("PATH");
+	if (!PATH_ptr || !*PATH_ptr)
 		return (NULL);
 
-	head = build_path_dirs(PATH + 5);
+	head = build_path_dirs(*PATH_ptr + 5);
 
 	dir_node = head;
 	while (dir_node)

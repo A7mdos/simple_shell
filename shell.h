@@ -89,9 +89,8 @@ void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size);
 
 
 /* Environment */
-char *_getenv(const char *name);
-int _setenv(const char *name, const char *value, int overwrite);
-int _unsetenv(const char *name);
+char **_getenv(char *name);
+/*int _unsetenv(char *name);*/
 
 
 /* Linked list */
@@ -116,5 +115,7 @@ char *error_2(char **args);
 int (*get_builtin(char *command))(char **args);
 int fshell_exit(char **args);
 int fshell_env(char **args);
+int fshell_setenv(char **args);
+
 
 #endif
