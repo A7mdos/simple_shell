@@ -92,7 +92,7 @@ char *error_2(char **args)
 	if (!history_str)
 		return (NULL);
 
-	len = _strlen(program_name) + _strlen(history_str) + _strlen(args[0]) + 27;
+	len = _strlen(program_name) + _strlen(history_str) + _strlen(args[1]) + 27;
 	error_msg = malloc(sizeof(char) * (len + 1));
 	if (!error_msg)
 	{
@@ -104,7 +104,7 @@ char *error_2(char **args)
 	_strcat(error_msg, ": ");
 	_strcat(error_msg, history_str);
 	_strcat(error_msg, ": exit: Illegal number: ");
-	_strcat(error_msg, args[0]);
+	_strcat(error_msg, args[1]);
 	_strcat(error_msg, "\n");
 
 	free(history_str);
