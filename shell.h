@@ -109,6 +109,7 @@ int write_error(char **args, int err);
 char *error_126(char **args);
 char *error_127(char **args);
 char *error_2(char **args);
+char *error_env(char **args);
 
 
 /* Builtins */

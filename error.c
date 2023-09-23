@@ -12,6 +12,7 @@ int write_error(char **args, int err)
 {
 	char *error_msg;
 
+	/*TODO: create an error struct instead of using switch */
 	switch (err)
 	{
 	case 126:
@@ -22,6 +23,9 @@ int write_error(char **args, int err)
 		break;
 	case 2:
 		error_msg = error_2(args);
+		break;
+	case 69:
+		error_msg = error_env(args);
 		break;
 	}
 
