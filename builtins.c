@@ -123,7 +123,6 @@ int fshell_setenv(char **args)
 	env_var = _getenv(name);
 	if (env_var)
 	{
-		free(*env_var);
 		*env_var = new_var;
 		return (0);
 	}
